@@ -42,10 +42,10 @@ infra/smalruby-infra/
 
 ```bash
 # 特定の関数をテスト
-./test-local.sh CorsForSmalruby events/cors-for-smalruby.json
+./test-local.sh CorsForSmalrubyFunction events/cors-for-smalruby.json
 
 # イベントファイルを省略（デフォルトのイベントファイルを使用）
-./test-local.sh SmalrubyCorsProxy
+./test-local.sh SmalrubyCorsProxyFunction
 
 # 利用可能な関数一覧を表示
 ./test-local.sh
@@ -191,16 +191,17 @@ SAM Localは詳細なログを出力します：
 sam local start-api --debug
 
 # ログレベルを指定
-sam local invoke CorsForSmalruby --event events/cors-for-smalruby.json --log-file sam-local.log
+sam local invoke CorsForSmalrubyFunction --event events/cors-for-smalruby.json --log-file sam-local.log
 ```
 
 ## 開発ワークフロー
 
 1. **Lambda関数の修正** → `lambda/*/lambda_function.rb`
-2. **単体テストの実行** → `bundle exec rake test`
-3. **ローカルテストの実行** → `./test-local.sh [function-name]`
-4. **API統合テストの実行** → `./start-local-api.sh` + `./test-api-endpoints.sh`
-5. **コミット** → `git add . && git commit -m "..."`
+2. **Lintの実行** → `bundle exec rake standard`
+3. **単体テストの実行** → `bundle exec rake test`
+4. **ローカルテストの実行** → `./test-local.sh [function-name]`
+5. **API統合テストの実行** → `./start-local-api.sh` + `./test-api-endpoints.sh`
+6. **コミット** → `git add . && git commit -m "..."`
 
 ## 注意点
 

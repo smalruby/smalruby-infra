@@ -47,6 +47,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: true
+
     - name: Set up AWS SAM CLI
       uses: aws-actions/setup-sam@v2
 
@@ -72,6 +78,12 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+
+    - name: Set up Ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '3.3'
+        bundler-cache: true
 
     - name: Set up AWS SAM CLI
       uses: aws-actions/setup-sam@v2

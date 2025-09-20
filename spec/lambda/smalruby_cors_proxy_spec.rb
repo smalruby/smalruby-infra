@@ -25,19 +25,19 @@ RSpec.describe "smalruby-cors-proxy lambda function" do
       end
 
       it "returns 200 with proxied content" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyCorsProxy.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
         expect(result[:body]).to eq("Hello World")
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq(valid_origin)
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq(valid_origin)
       end
 
       it "sets correct CORS headers" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyCorsProxy.lambda_handler(event: event, context: context)
 
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq(valid_origin)
-        expect(result[:headers]["Access-Control-Allow-Headers"]).to eq("Content-Type")
-        expect(result[:headers]["Access-Control-Allow-Methods"]).to eq("OPTIONS,GET")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq(valid_origin)
+        expect(result[:headers][:"Access-Control-Allow-Headers"]).to eq("Content-Type")
+        expect(result[:headers][:"Access-Control-Allow-Methods"]).to eq("OPTIONS,GET")
       end
     end
 
@@ -55,9 +55,9 @@ RSpec.describe "smalruby-cors-proxy lambda function" do
       end
 
       it "uses default origin in CORS headers" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyCorsProxy.lambda_handler(event: event, context: context)
 
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
       end
     end
 
@@ -70,7 +70,7 @@ RSpec.describe "smalruby-cors-proxy lambda function" do
       end
 
       it "returns 400 bad request" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyCorsProxy.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(400)
         body = JSON.parse(result[:body])
@@ -90,11 +90,11 @@ RSpec.describe "smalruby-cors-proxy lambda function" do
 
       before do
         stub_request(:get, "https://drive.google.com/uc?export=download&id=1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms")
-          .to_return(status: 200, body: "Google Drive Content")
+          .to_return(status: 200, body: "Google Drive Content", headers: {"Content-Type" => "text/plain"})
       end
 
       it "converts Google Drive URL and fetches content" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyCorsProxy.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
         expect(result[:body]).to eq("Google Drive Content")
@@ -119,7 +119,7 @@ RSpec.describe "smalruby-cors-proxy lambda function" do
       end
 
       it "returns base64 encoded binary data" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyCorsProxy.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
         expect(result[:isBase64Encoded]).to be true
@@ -141,7 +141,7 @@ RSpec.describe "smalruby-cors-proxy lambda function" do
       end
 
       it "returns 500 internal server error" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyCorsProxy.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(500)
         body = JSON.parse(result[:body])

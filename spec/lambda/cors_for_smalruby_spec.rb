@@ -17,12 +17,12 @@ RSpec.describe "cors-for-smalruby lambda function" do
       end
 
       it "returns 200 with correct CORS headers" do
-        result = lambda_handler(event: event, context: context)
+        result = CorsForSmalruby.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
-        expect(result[:headers]["Access-Control-Allow-Headers"]).to eq("Content-Type")
-        expect(result[:headers]["Access-Control-Allow-Methods"]).to eq("OPTIONS,GET")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
+        expect(result[:headers][:"Access-Control-Allow-Headers"]).to eq("Content-Type")
+        expect(result[:headers][:"Access-Control-Allow-Methods"]).to eq("OPTIONS,GET")
 
         body = JSON.parse(result[:body])
         expect(body["message"]).to eq("OK")
@@ -37,10 +37,10 @@ RSpec.describe "cors-for-smalruby lambda function" do
       end
 
       it "returns 200 with smalruby.jp origin" do
-        result = lambda_handler(event: event, context: context)
+        result = CorsForSmalruby.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq("https://smalruby.jp")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq("https://smalruby.jp")
       end
     end
 
@@ -52,10 +52,10 @@ RSpec.describe "cors-for-smalruby lambda function" do
       end
 
       it "returns 200 with localhost origin" do
-        result = lambda_handler(event: event, context: context)
+        result = CorsForSmalruby.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq("http://localhost:8601")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq("http://localhost:8601")
       end
     end
 
@@ -67,10 +67,10 @@ RSpec.describe "cors-for-smalruby lambda function" do
       end
 
       it "returns 200 with default origin" do
-        result = lambda_handler(event: event, context: context)
+        result = CorsForSmalruby.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
       end
     end
 
@@ -82,10 +82,10 @@ RSpec.describe "cors-for-smalruby lambda function" do
       end
 
       it "returns 200 with default origin" do
-        result = lambda_handler(event: event, context: context)
+        result = CorsForSmalruby.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
       end
     end
 
@@ -93,10 +93,10 @@ RSpec.describe "cors-for-smalruby lambda function" do
       let(:event) { {} }
 
       it "returns 200 with default origin" do
-        result = lambda_handler(event: event, context: context)
+        result = CorsForSmalruby.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
       end
     end
   end

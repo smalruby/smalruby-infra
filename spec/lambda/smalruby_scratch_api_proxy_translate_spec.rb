@@ -19,11 +19,11 @@ RSpec.describe "smalruby-scratch-api-proxy-translate lambda function" do
       end
 
       it "returns 200 with CORS headers" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyTranslate.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq(valid_origin)
-        expect(result[:headers]["Access-Control-Allow-Methods"]).to eq("OPTIONS,GET")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq(valid_origin)
+        expect(result[:headers][:"Access-Control-Allow-Methods"]).to eq("OPTIONS,GET")
 
         body = JSON.parse(result[:body])
         expect(body["message"]).to eq("OK")
@@ -53,10 +53,10 @@ RSpec.describe "smalruby-scratch-api-proxy-translate lambda function" do
       end
 
       it "proxies translation request to Scratch API" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyTranslate.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq("200")
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq(valid_origin)
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq(valid_origin)
 
         body = JSON.parse(result[:body])
         expect(body["result"]).to eq("こんにちは世界")
@@ -75,7 +75,7 @@ RSpec.describe "smalruby-scratch-api-proxy-translate lambda function" do
       end
 
       it "returns 400 bad request" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyTranslate.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(400)
 
@@ -98,7 +98,7 @@ RSpec.describe "smalruby-scratch-api-proxy-translate lambda function" do
       end
 
       it "returns 400 bad request" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyTranslate.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(400)
 
@@ -127,9 +127,9 @@ RSpec.describe "smalruby-scratch-api-proxy-translate lambda function" do
       end
 
       it "uses default origin in CORS headers" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyTranslate.lambda_handler(event: event, context: context)
 
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
       end
     end
 
@@ -156,7 +156,7 @@ RSpec.describe "smalruby-scratch-api-proxy-translate lambda function" do
       end
 
       it "proxies error response from Scratch API" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyTranslate.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq("400")
 

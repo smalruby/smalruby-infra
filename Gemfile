@@ -2,6 +2,8 @@
 
 source "https://rubygems.org"
 
+gem "base64"
+
 group :development, :test do
   gem "standard", "~> 1.0"
   gem "rake"

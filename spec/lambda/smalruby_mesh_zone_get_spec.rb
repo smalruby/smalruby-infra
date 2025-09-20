@@ -21,7 +21,7 @@ RSpec.describe "smalruby-mesh-zone-get lambda function" do
       end
 
       it "returns 200 with generated domain" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyMeshZoneGet.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
         expect(result[:headers]).to include("Access-Control-Allow-Origin": "*")
@@ -61,8 +61,8 @@ RSpec.describe "smalruby-mesh-zone-get lambda function" do
           }
         }
 
-        result1 = lambda_handler(event: event1, context: context)
-        result2 = lambda_handler(event: event2, context: context)
+        result1 = SmalrubyMeshZoneGet.lambda_handler(event: event1, context: context)
+        result2 = SmalrubyMeshZoneGet.lambda_handler(event: event2, context: context)
 
         body1 = JSON.parse(result1[:body])
         body2 = JSON.parse(result2[:body])
@@ -81,7 +81,7 @@ RSpec.describe "smalruby-mesh-zone-get lambda function" do
       end
 
       it "uses 'none' as default and generates domain" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyMeshZoneGet.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
 
@@ -95,7 +95,7 @@ RSpec.describe "smalruby-mesh-zone-get lambda function" do
       let(:event) { {} }
 
       it "uses 'none' as default and generates domain" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyMeshZoneGet.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
 

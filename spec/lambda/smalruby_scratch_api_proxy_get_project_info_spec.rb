@@ -45,11 +45,11 @@ RSpec.describe "smalruby-scratch-api-proxy-get-project-info lambda function" do
       end
 
       it "returns project information from Scratch API" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyGetProjectInfo.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq(valid_origin)
-        expect(result[:headers]["Access-Control-Allow-Methods"]).to eq("OPTIONS,GET")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq(valid_origin)
+        expect(result[:headers][:"Access-Control-Allow-Methods"]).to eq("OPTIONS,GET")
 
         body = JSON.parse(result[:body])
         expect(body["id"]).to eq(123456789)
@@ -77,7 +77,7 @@ RSpec.describe "smalruby-scratch-api-proxy-get-project-info lambda function" do
       end
 
       it "returns 200 with not found response from Scratch API" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyGetProjectInfo.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
         expect(result[:body]).to eq("Not found")
@@ -99,9 +99,9 @@ RSpec.describe "smalruby-scratch-api-proxy-get-project-info lambda function" do
       end
 
       it "uses default origin in CORS headers" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyGetProjectInfo.lambda_handler(event: event, context: context)
 
-        expect(result[:headers]["Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
+        expect(result[:headers][:"Access-Control-Allow-Origin"]).to eq("https://smalruby.app")
       end
     end
 
@@ -119,7 +119,7 @@ RSpec.describe "smalruby-scratch-api-proxy-get-project-info lambda function" do
       end
 
       it "handles missing project ID gracefully" do
-        result = lambda_handler(event: event, context: context)
+        result = SmalrubyScratchApiProxyGetProjectInfo.lambda_handler(event: event, context: context)
 
         expect(result[:statusCode]).to eq(200)
         expect(result[:body]).to eq("Not found")
@@ -142,7 +142,7 @@ RSpec.describe "smalruby-scratch-api-proxy-get-project-info lambda function" do
 
       it "handles network errors gracefully" do
         expect {
-          lambda_handler(event: event, context: context)
+          SmalrubyScratchApiProxyGetProjectInfo.lambda_handler(event: event, context: context)
         }.to raise_error(SocketError, "Connection refused")
       end
     end

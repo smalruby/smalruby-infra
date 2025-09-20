@@ -29,6 +29,7 @@ Resources:
       Handler: lambda_function.lambda_handler
       CodeUri: lambda/smalruby-cors-proxy/
       Description: General-purpose CORS proxy for Smalruby
+      MemorySize: 512
       Events:
         CorsProxyGet:
           Type: Api
@@ -36,12 +37,6 @@ Resources:
             RestApiId: !Ref SmalrubyApiGateway
             Path: /cors-proxy
             Method: GET
-        CorsProxyOptions:
-          Type: Api
-          Properties:
-            RestApiId: !Ref SmalrubyApiGateway
-            Path: /cors-proxy
-            Method: OPTIONS
 
   SmalrubyMeshZoneGetFunction:
     Type: AWS::Serverless::Function
@@ -74,12 +69,6 @@ Resources:
             RestApiId: !Ref SmalrubyApiGateway
             Path: /scratch-api-proxy/translate
             Method: GET
-        TranslateOptions:
-          Type: Api
-          Properties:
-            RestApiId: !Ref SmalrubyApiGateway
-            Path: /scratch-api-proxy/translate
-            Method: OPTIONS
 
   SmalrubyGetProjectInfoFunction:
     Type: AWS::Serverless::Function
@@ -96,12 +85,6 @@ Resources:
             RestApiId: !Ref SmalrubyApiGateway
             Path: /scratch-api-proxy/projects/{projectId}
             Method: GET
-        ProjectInfoOptions:
-          Type: Api
-          Properties:
-            RestApiId: !Ref SmalrubyApiGateway
-            Path: /scratch-api-proxy/projects/{projectId}
-            Method: OPTIONS
 
   CorsForSmalrubyFunction:
     Type: AWS::Serverless::Function
@@ -111,6 +94,31 @@ Resources:
       Handler: lambda_function.lambda_handler
       CodeUri: lambda/cors-for-smalruby/
       Description: CORS handler for Smalruby
+      Events:
+        CorsProxyOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /cors-proxy
+            Method: OPTIONS
+        MeshDomainOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /mesh-domain
+            Method: OPTIONS
+        TranslateOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /scratch-api-proxy/translate
+            Method: OPTIONS
+        ProjectInfoOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /scratch-api-proxy/projects/{projectId}
+            Method: OPTIONS
 
   # API Gateway
   SmalrubyApiGateway:

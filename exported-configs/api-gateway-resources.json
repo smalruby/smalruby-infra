@@ -1,0 +1,59 @@
+{
+    "items": [
+        {
+            "id": "965gwv",
+            "parentId": "ynu92rf927",
+            "pathPart": "scratch-api-proxy",
+            "path": "/scratch-api-proxy"
+        },
+        {
+            "id": "96ob7y",
+            "parentId": "965gwv",
+            "pathPart": "translate",
+            "path": "/scratch-api-proxy/translate",
+            "resourceMethods": {
+                "GET": {},
+                "OPTIONS": {}
+            }
+        },
+        {
+            "id": "dxma2u",
+            "parentId": "ynu92rf927",
+            "pathPart": "cors-proxy",
+            "path": "/cors-proxy",
+            "resourceMethods": {
+                "GET": {},
+                "OPTIONS": {}
+            }
+        },
+        {
+            "id": "eptw95",
+            "parentId": "ynu92rf927",
+            "pathPart": "mesh-domain",
+            "path": "/mesh-domain",
+            "resourceMethods": {
+                "GET": {}
+            }
+        },
+        {
+            "id": "maxomq",
+            "parentId": "965gwv",
+            "pathPart": "projects",
+            "path": "/scratch-api-proxy/projects"
+        },
+        {
+            "id": "qda5dv",
+            "parentId": "maxomq",
+            "pathPart": "{projectId}",
+            "path": "/scratch-api-proxy/projects/{projectId}",
+            "resourceMethods": {
+                "GET": {},
+                "OPTIONS": {}
+            }
+        },
+        {
+            "id": "ynu92rf927",
+            "path": "/"
+        }
+    ]
+}

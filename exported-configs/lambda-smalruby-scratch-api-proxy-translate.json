@@ -1,0 +1,44 @@
+{
+    "Configuration": {
+        "FunctionName": "smalruby-scratch-api-proxy-translate",
+        "FunctionArn": "arn:aws:lambda:ap-northeast-1:007325983811:function:smalruby-scratch-api-proxy-translate",
+        "Runtime": "ruby3.4",
+        "Role": "arn:aws:iam::007325983811:role/service-role/smalruby-scratch-api-proxy-translate-role-86mr4f4e",
+        "Handler": "lambda_function.lambda_handler",
+        "CodeSize": 760,
+        "Description": "",
+        "Timeout": 2,
+        "MemorySize": 128,
+        "LastModified": "2025-09-05T15:19:01.000+0000",
+        "CodeSha256": "5iwEYrwAc40Ay5SyHV4iDXrtfoPSBu4oz8ncTZCBhAQ=",
+        "Version": "$LATEST",
+        "TracingConfig": {
+            "Mode": "PassThrough"
+        },
+        "RevisionId": "eef550bf-7eb1-4163-b2c8-8960f65cdb57",
+        "State": "Active",
+        "LastUpdateStatus": "Successful",
+        "PackageType": "Zip",
+        "Architectures": [
+            "arm64"
+        ],
+        "EphemeralStorage": {
+            "Size": 512
+        },
+        "SnapStart": {
+            "ApplyOn": "None",
+            "OptimizationStatus": "Off"
+        },
+        "RuntimeVersionConfig": {
+            "RuntimeVersionArn": "arn:aws:lambda:ap-northeast-1::runtime:8541711093a56e27da47297f9b8c92790095bcc1effb482683b9d2d052765867"
+        },
+        "LoggingConfig": {
+            "LogFormat": "Text",
+            "LogGroup": "/aws/lambda/smalruby-scratch-api-proxy-translate"
+        }
+    },
+    "Code": {
+        "RepositoryType": "S3",
+        "Location": "https://awslambda-ap-ne-1-tasks.s3.ap-northeast-1.amazonaws.com/snapshots/007325983811/smalruby-scratch-api-proxy-translate-0a82f931-e816-4803-ad42-c2ab0b7cff79?versionId=rjwooDIGJ27zXZ7BR1xAOyC73II0YRxF&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEGgaDmFwLW5vcnRoZWFzdC0xIkYwRAIgLBxOnowEzw%2BUX6xWh54BhrlUB5td1QvP8eH3YQnbteICICoCoMXR3LyTCYcK2MUtvSjcT1VE7CFwKpveGS4tPI4wKpICCOH%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQBBoMOTE5OTgwOTI1MTM5IgzWmg9YKZEKtH7dOjsq5gF0yzsd18IoY85%2BG24PaEgT86xGaPXImtJKSVPD%2FsNjYRFana9pkLHgepOqNSsu4rEJqU8%2FnEwqk%2B599n4XuEaTb8w%2Bvf3ddHPRjc21QHQLmLQHO4Cq5X41qguy9klloAyvT302G8JnWc%2BZ3WL50BeOZbsDDaNenpOImM%2BCxcYi3bmBfAnDZT3UhW38Vfl7Yhalg1h4paJs5E3Rfe96HdEJtCAQGbK2Ni%2F%2FAaCRMoZsPRdwb9o3fP0Vl3lPyw5EzcwVCSXHGNdrSjLk3wrS2asXice9F2RV85W05AI5Er%2FdRqKv3CaalTC45bfGBjqQAeT%2Bm9%2BVYanLv%2FJx%2BuJyWlJqA1VO0ofpz6XzS1A011YC6N4wJ6o0yeBULNwNbAhrwlNx4hQM2%2BDcRnz4Q6%2BIt3ggxZemUdjnY8oeSeV94MyFLU1p7mM%2BwNC2bsH%2BfKePYYNTeus3mora%2B8GnS7SjZbcBSayg%2B3c3xvkHUuwAS2eFpJ11zLp780NkWrZZMGXPng%3D%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20250920T022356Z&X-Amz-SignedHeaders=host&X-Amz-Expires=600&X-Amz-Credential=ASIA5MMZC4DJZLRYRNCQ%2F20250920%2Fap-northeast-1%2Fs3%2Faws4_request&X-Amz-Signature=efc2ab3107d0a6da97074550e4241481475a6be0ed7db91322420a0c53344b5b"
+    }
+}

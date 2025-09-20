@@ -1,0 +1,155 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Smalruby Infrastructure - API Gateway and Lambda functions for CORS proxy and Scratch API proxy'
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 128
+    Architectures:
+      - arm64
+
+Parameters:
+  Stage:
+    Type: String
+    Default: prod
+    Description: Deployment stage
+  DomainName:
+    Type: String
+    Default: api.smalruby.app
+    Description: Custom domain name for API Gateway
+
+Resources:
+  # Lambda Functions
+  SmalrubyCorsProxyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: smalruby-cors-proxy
+      Runtime: ruby3.4
+      Handler: lambda_function.lambda_handler
+      CodeUri: lambda/smalruby-cors-proxy/
+      Description: General-purpose CORS proxy for Smalruby
+      Events:
+        CorsProxyGet:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /cors-proxy
+            Method: GET
+        CorsProxyOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /cors-proxy
+            Method: OPTIONS
+
+  SmalrubyMeshZoneGetFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: smalruby-mesh-zone-get
+      Runtime: ruby3.4
+      Handler: lambda_function.lambda_handler
+      CodeUri: lambda/smalruby-mesh-zone-get/
+      Description: Generate identity from gateway IPv4 address for Smalruby Mesh
+      Events:
+        MeshDomainGet:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /mesh-domain
+            Method: GET
+
+  SmalrubyTranslateProxyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: smalruby-scratch-api-proxy-translate
+      Runtime: ruby3.4
+      Handler: lambda_function.lambda_handler
+      CodeUri: lambda/smalruby-scratch-api-proxy-translate/
+      Description: Scratch API proxy for translate endpoint
+      Events:
+        TranslateGet:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /scratch-api-proxy/translate
+            Method: GET
+        TranslateOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /scratch-api-proxy/translate
+            Method: OPTIONS
+
+  SmalrubyGetProjectInfoFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: smalruby-scratch-api-proxy-get-project-info
+      Runtime: ruby3.4
+      Handler: lambda_function.lambda_handler
+      CodeUri: lambda/smalruby-scratch-api-proxy-get-project-info/
+      Description: Scratch API proxy for project info endpoint
+      Events:
+        ProjectInfoGet:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /scratch-api-proxy/projects/{projectId}
+            Method: GET
+        ProjectInfoOptions:
+          Type: Api
+          Properties:
+            RestApiId: !Ref SmalrubyApiGateway
+            Path: /scratch-api-proxy/projects/{projectId}
+            Method: OPTIONS
+
+  CorsForSmalrubyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: cors-for-smalruby
+      Runtime: ruby3.4
+      Handler: lambda_function.lambda_handler
+      CodeUri: lambda/cors-for-smalruby/
+      Description: CORS handler for Smalruby
+
+  # API Gateway
+  SmalrubyApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: Smalruby Mesh Zone
+      Description: Generate identity from the gateway IPv4 address for Smalruby Mesh
+      StageName: !Ref Stage
+      EndpointConfiguration:
+        Type: REGIONAL
+      BinaryMediaTypes:
+        - "*/*"
+      Cors:
+        AllowMethods: "'GET,POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+        MaxAge: "'600'"
+
+Outputs:
+  ApiUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${SmalrubyApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/"
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiUrl"
+
+  ApiGatewayId:
+    Description: "API Gateway ID"
+    Value: !Ref SmalrubyApiGateway
+    Export:
+      Name: !Sub "${AWS::StackName}-ApiGatewayId"
+
+  CorsProxyFunctionArn:
+    Description: "CORS Proxy Lambda Function ARN"
+    Value: !GetAtt SmalrubyCorsProxyFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-CorsProxyFunctionArn"
+
+  MeshZoneGetFunctionArn:
+    Description: "Mesh Zone Get Lambda Function ARN"
+    Value: !GetAtt SmalrubyMeshZoneGetFunction.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-MeshZoneGetFunctionArn"

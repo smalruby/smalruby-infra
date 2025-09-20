@@ -1,18 +1,18 @@
-# Placeholder for smalruby-mesh-zone-get Lambda function
-# This file should be replaced with actual Lambda function code
+require 'json'
+require 'zlib'
 
 def lambda_handler(event:, context:)
-  # TODO: Implement mesh zone domain generation from gateway IP
-  # This is a placeholder implementation
+    secret_key = "uXM1VAA6MO39yJ+djz4kbpVGy3Rg1V3Z"
+    source_ip = event.dig("requestContext", "identity", "sourceIp") || "none"
+    domain = Zlib.crc32(secret_key + source_ip).to_s(16)
 
-  {
-    statusCode: 200,
-    headers: {
-      'Content-Type' => 'application/json'
-    },
-    body: JSON.generate({
-      domain: 'example.mesh.smalruby.app',
-      message: 'Mesh Zone Get - Implementation needed'
-    })
-  }
+    {
+        statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "OPTIONS,GET",
+        },
+        body: JSON.generate(domain: domain),
+    }
 end

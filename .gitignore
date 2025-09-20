@@ -1,0 +1,26 @@
+# Exported configurations - contains sensitive AWS configuration data
+exported-configs/
+
+# AWS SAM build artifacts
+.aws-sam/
+
+# Local environment files
+.env
+.env.local
+
+# Temporary files
+*.tmp
+*.log
+
+# macOS
+.DS_Store
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Dependency directories
+node_modules/
+vendor/

@@ -41,7 +41,7 @@ GitHub ActionsからAWSリソースにアクセスする際、従来のIAMユー
         {
             "Effect": "Allow",
             "Principal": {
-                "Federated": "arn:aws:iam::007325983811:oidc-provider/token.actions.githubusercontent.com"
+                "Federated": "arn:aws:iam::<AWSアカウントID>:oidc-provider/token.actions.githubusercontent.com"
             },
             "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
@@ -49,10 +49,7 @@ GitHub ActionsからAWSリソースにアクセスする際、従来のIAMユー
                     "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
                 },
                 "StringLike": {
-                    "token.actions.githubusercontent.com:sub": [
-                        "repo:smalruby/smalruby-infra:ref:refs/heads/main",
-                        "repo:smalruby/smalruby-infra:pull_request"
-                    ]
+                    "token.actions.githubusercontent.com:sub": "repo:smalruby/smalruby-infra:*"
                 }
             }
         }
@@ -60,7 +57,7 @@ GitHub ActionsからAWSリソースにアクセスする際、従来のIAMユー
 }
 ```
 
-**重要**: `007325983811` は実際のAWSアカウントIDに置き換えてください。
+**重要**: `<AWSアカウントID>` は実際のAWSアカウントIDに置き換えてください。
 
 ### 2.3 権限ポリシーの追加
 デプロイに必要な権限を持つポリシーを添付します：
@@ -192,9 +189,9 @@ GitHub ActionsからAWSリソースにアクセスする際、従来のIAMユー
 
 | Secret名 | 値 | 説明 |
 |----------|---|------|
-| `AWS_ROLE_ARN` | `arn:aws:iam::007325983811:role/GitHubActions-smalruby-infra-deploy` | 作成したIAMロールのARN |
+| `AWS_ROLE_ARN` | `arn:aws:iam::<AWSアカウントID>:role/GitHubActions-smalruby-infra-deploy` | 作成したIAMロールのARN |
 
-**注意**: `007325983811` は実際のAWSアカウントIDに置き換えてください。
+**注意**: `<AWSアカウントID>` は実際のAWSアカウントIDに置き換えてください。
 
 ### 3.3 従来のSecretsの削除（推奨）
 OIDCが正常に動作することを確認後、以下の従来のSecretsは削除できます：
@@ -225,18 +222,16 @@ GitHub Actions実行ログで以下を確認：
 **原因**: 信頼関係の設定が正しくない
 **主な問題**:
 - Actionが `sts:AssumeRole` になっている（正：`sts:AssumeRoleWithWebIdentity`）
-- 条件でpull_requestが許可されていない
+- 条件が厳しすぎる（推奨：`repo:smalruby/smalruby-infra:*`）
 - リポジトリ名・ブランチ名の誤り
 
 **対処法**:
 1. IAMロールの信頼関係を確認
 2. `"Action": "sts:AssumeRoleWithWebIdentity"` になっているか確認
-3. 条件に `"repo:smalruby/smalruby-infra:pull_request"` が含まれているか確認
+3. 条件が `"repo:smalruby/smalruby-infra:*"` になっているか確認
 
-**修正コマンド**:
-```bash
-aws iam update-assume-role-policy --role-name GitHubActions-smalruby-infra-deploy --policy-document file://trust-policy.json
-```
+**修正方法**:
+AWSマネジメントコンソールのIAM → Roles → GitHubActions-smalruby-infra-deploy → Trust relationships タブで信頼関係を編集してください。
 
 ### エラー例2: "Access Denied"
 **原因**: ロールに必要な権限がない
@@ -251,17 +246,7 @@ aws iam update-assume-role-policy --role-name GitHubActions-smalruby-infra-deplo
 **対処**: 手順1.2に従ってOIDC Providerを作成
 
 ### デバッグ手順
-1. **OIDC Provider確認**:
-   ```bash
-   aws iam list-open-id-connect-providers
-   ```
-
-2. **ロール存在確認**:
-   ```bash
-   aws iam get-role --role-name GitHubActions-smalruby-infra-deploy
-   ```
-
-3. **信頼関係確認**:
-   ```bash
-   aws iam get-role --role-name GitHubActions-smalruby-infra-deploy --query 'Role.AssumeRolePolicyDocument'
-   ```
+1. **OIDC Provider確認**: AWSマネジメントコンソール → IAM → Identity providers で確認
+2. **ロール存在確認**: AWSマネジメントコンソール → IAM → Roles で「GitHubActions-smalruby-infra-deploy」を検索
+3. **信頼関係確認**: 該当ロールの Trust relationships タブで設定内容を確認
+4. **権限確認**: 該当ロールの Permissions タブで必要なポリシーが添付されているか確認

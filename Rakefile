@@ -15,11 +15,15 @@ end
 desc "Run all tests"
 RSpec::Core::RakeTask.new(:test) do |t|
   t.pattern = "spec/**/*_spec.rb"
+  # Set CI environment variable to prevent lambda_handler redefinition warnings
+  ENV["CI"] = "true"
 end
 
 desc "Run Lambda function tests only"
 RSpec::Core::RakeTask.new("test:lambda") do |t|
   t.pattern = "spec/lambda/*_spec.rb"
+  # Set CI environment variable to prevent lambda_handler redefinition warnings
+  ENV["CI"] = "true"
 end
 
 desc "Run lint and tests"

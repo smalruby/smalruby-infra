@@ -20,6 +20,8 @@ module SmalrubyMeshZoneGet
 end
 
 # AWS Lambda entry point
-def lambda_handler(event:, context:)
-  SmalrubyMeshZoneGet.lambda_handler(event: event, context: context)
+unless ENV["CI"] == "true"
+  def lambda_handler(event:, context:)
+    SmalrubyMeshZoneGet.lambda_handler(event: event, context: context)
+  end
 end

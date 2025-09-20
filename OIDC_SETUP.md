@@ -43,13 +43,16 @@ GitHub ActionsからAWSリソースにアクセスする際、従来のIAMユー
             "Principal": {
                 "Federated": "arn:aws:iam::007325983811:oidc-provider/token.actions.githubusercontent.com"
             },
-            "Action": "sts:AssumeRole",
+            "Action": "sts:AssumeRoleWithWebIdentity",
             "Condition": {
                 "StringEquals": {
                     "token.actions.githubusercontent.com:aud": "sts.amazonaws.com"
                 },
                 "StringLike": {
-                    "token.actions.githubusercontent.com:sub": "repo:smalruby/smalruby-infra:ref:refs/heads/main"
+                    "token.actions.githubusercontent.com:sub": [
+                        "repo:smalruby/smalruby-infra:ref:refs/heads/main",
+                        "repo:smalruby/smalruby-infra:pull_request"
+                    ]
                 }
             }
         }
@@ -218,9 +221,22 @@ GitHub Actions実行ログで以下を確認：
 
 ## トラブルシューティング
 
-### エラー例1: "AssumeRoleFailure"
+### エラー例1: "Not authorized to perform sts:AssumeRoleWithWebIdentity"
 **原因**: 信頼関係の設定が正しくない
-**対処**: ロールの信頼関係でリポジトリ名・ブランチ名を確認
+**主な問題**:
+- Actionが `sts:AssumeRole` になっている（正：`sts:AssumeRoleWithWebIdentity`）
+- 条件でpull_requestが許可されていない
+- リポジトリ名・ブランチ名の誤り
+
+**対処法**:
+1. IAMロールの信頼関係を確認
+2. `"Action": "sts:AssumeRoleWithWebIdentity"` になっているか確認
+3. 条件に `"repo:smalruby/smalruby-infra:pull_request"` が含まれているか確認
+
+**修正コマンド**:
+```bash
+aws iam update-assume-role-policy --role-name GitHubActions-smalruby-infra-deploy --policy-document file://trust-policy.json
+```
 
 ### エラー例2: "Access Denied"
 **原因**: ロールに必要な権限がない
@@ -229,3 +245,23 @@ GitHub Actions実行ログで以下を確認：
 ### エラー例3: "Invalid identity token"
 **原因**: GitHub Actionsの設定が正しくない
 **対処**: `permissions`セクションに`id-token: write`があるか確認
+
+### エラー例4: "OIDC Provider not found"
+**原因**: OIDC Identity Providerが作成されていない
+**対処**: 手順1.2に従ってOIDC Providerを作成
+
+### デバッグ手順
+1. **OIDC Provider確認**:
+   ```bash
+   aws iam list-open-id-connect-providers
+   ```
+
+2. **ロール存在確認**:
+   ```bash
+   aws iam get-role --role-name GitHubActions-smalruby-infra-deploy
+   ```
+
+3. **信頼関係確認**:
+   ```bash
+   aws iam get-role --role-name GitHubActions-smalruby-infra-deploy --query 'Role.AssumeRolePolicyDocument'
+   ```

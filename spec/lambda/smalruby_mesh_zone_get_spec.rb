@@ -35,8 +35,8 @@ RSpec.describe "smalruby-mesh-zone-get lambda function" do
       end
 
       it "generates consistent domain for same IP" do
-        result1 = lambda_handler(event: event, context: context)
-        result2 = lambda_handler(event: event, context: context)
+        result1 = SmalrubyMeshZoneGet.lambda_handler(event: event, context: context)
+        result2 = SmalrubyMeshZoneGet.lambda_handler(event: event, context: context)
 
         body1 = JSON.parse(result1[:body])
         body2 = JSON.parse(result2[:body])

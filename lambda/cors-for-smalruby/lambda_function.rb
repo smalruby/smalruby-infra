@@ -24,6 +24,8 @@ module CorsForSmalruby
 end
 
 # AWS Lambda entry point
-def lambda_handler(event:, context:)
-  CorsForSmalruby.lambda_handler(event: event, context: context)
+unless ENV["CI"] == "true"
+  def lambda_handler(event:, context:)
+    CorsForSmalruby.lambda_handler(event: event, context: context)
+  end
 end

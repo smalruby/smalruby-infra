@@ -46,6 +46,24 @@ pip install aws-sam-cli
 
 ## Usage
 
+### Local Testing
+
+ローカルでLambda関数をテストするには、[LOCAL_TESTING.md](./LOCAL_TESTING.md)を参照してください。
+
+```bash
+# 個別の関数をテスト
+./test-local.sh CorsForSmalrubyFunction
+
+# すべての関数をテスト
+./test-all-local.sh
+
+# ローカルAPI Gatewayを起動
+./start-local-api.sh
+
+# API エンドポイントをテスト
+./test-api-endpoints.sh
+```
+
 ### Export Existing Configurations
 
 ```bash

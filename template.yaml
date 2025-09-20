@@ -7,7 +7,7 @@ Globals:
     Timeout: 10
     MemorySize: 128
     Architectures:
-      - arm64
+      - x86_64
 
 Parameters:
   Stage:
@@ -25,7 +25,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: smalruby-cors-proxy
-      Runtime: ruby3.4
+      Runtime: ruby3.2
       Handler: lambda_function.lambda_handler
       CodeUri: lambda/smalruby-cors-proxy/
       Description: General-purpose CORS proxy for Smalruby
@@ -47,7 +47,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: smalruby-mesh-zone-get
-      Runtime: ruby3.4
+      Runtime: ruby3.2
       Handler: lambda_function.lambda_handler
       CodeUri: lambda/smalruby-mesh-zone-get/
       Description: Generate identity from gateway IPv4 address for Smalruby Mesh
@@ -63,7 +63,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: smalruby-scratch-api-proxy-translate
-      Runtime: ruby3.4
+      Runtime: ruby3.2
       Handler: lambda_function.lambda_handler
       CodeUri: lambda/smalruby-scratch-api-proxy-translate/
       Description: Scratch API proxy for translate endpoint
@@ -85,7 +85,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: smalruby-scratch-api-proxy-get-project-info
-      Runtime: ruby3.4
+      Runtime: ruby3.2
       Handler: lambda_function.lambda_handler
       CodeUri: lambda/smalruby-scratch-api-proxy-get-project-info/
       Description: Scratch API proxy for project info endpoint
@@ -107,7 +107,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: cors-for-smalruby
-      Runtime: ruby3.4
+      Runtime: ruby3.2
       Handler: lambda_function.lambda_handler
       CodeUri: lambda/cors-for-smalruby/
       Description: CORS handler for Smalruby

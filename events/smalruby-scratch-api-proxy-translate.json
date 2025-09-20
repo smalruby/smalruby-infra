@@ -1,0 +1,10 @@
+{
+  "headers": {
+    "origin": "https://smalruby.app"
+  },
+  "queryStringParameters": {
+    "language": "ja",
+    "text": "Hello World"
+  },
+  "httpMethod": "GET"
+}

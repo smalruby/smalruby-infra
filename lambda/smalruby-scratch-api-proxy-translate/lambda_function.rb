@@ -3,11 +3,11 @@ require "net/http"
 require "cgi"
 require "json"
 
-ALLOW_ORIGINS = %w(
+ALLOW_ORIGINS = %w[
   https://smalruby.app
   https://smalruby.jp
   http://localhost:8601
-)
+]
 API_HOST = "https://translate-service.scratch.mit.edu"
 
 def lambda_handler(event:, context:)
@@ -22,7 +22,7 @@ def lambda_handler(event:, context:)
     return {
       statusCode: 200,
       headers:,
-      body: JSON.generate(message: "OK"),
+      body: JSON.generate(message: "OK")
     }
   end
 
@@ -35,14 +35,14 @@ def lambda_handler(event:, context:)
       headers:,
       body: {
         code: "Bad Request",
-        message: "invalid locale code",
+        message: "invalid locale code"
       }.to_json
     }
   end
 
   query = {
     language:,
-    text:,
+    text:
   }.map { |key, value|
     "#{CGI.escape(key.to_s)}=#{CGI.escape(value.to_s)}"
   }.join("&")

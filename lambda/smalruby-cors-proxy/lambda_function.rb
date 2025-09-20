@@ -4,11 +4,11 @@ require "cgi"
 require "json"
 require "base64"
 
-ALLOW_ORIGINS = %w(
+ALLOW_ORIGINS = %w[
   https://smalruby.app
   https://smalruby.jp
   http://localhost:8601
-)
+]
 
 def lambda_handler(event:, context:)
   origin = event.dig("headers", "origin").to_s.strip
@@ -25,7 +25,7 @@ def lambda_handler(event:, context:)
       headers:,
       body: {
         code: "Bad Request",
-        message: "invalid url",
+        message: "invalid url"
       }.to_json,
       isBase64Encoded: false
     }
@@ -74,17 +74,17 @@ end
 
 def extract_google_drive_file_id(url)
   # パターン1: https://drive.google.com/file/d/FILE_ID/view
-  if match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/)
+  if (match = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/))
     return match[1]
   end
 
   # パターン2: https://drive.google.com/open?id=FILE_ID
-  if match = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/)
+  if (match = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/))
     return match[1]
   end
 
   # パターン3: 既に uc?export=view&id=FILE_ID の形式
-  if match = url.match(/drive\.google\.com\/uc\?.*id=([a-zA-Z0-9_-]+)/)
+  if (match = url.match(/drive\.google\.com\/uc\?.*id=([a-zA-Z0-9_-]+)/))
     return match[1]
   end
 
@@ -99,19 +99,19 @@ def fetch_content(url)
   end
 
   http = Net::HTTP.new(uri.host, uri.port)
-  http.use_ssl = (uri.scheme == 'https')
+  http.use_ssl = (uri.scheme == "https")
   http.read_timeout = 30
   http.open_timeout = 10
 
   request = Net::HTTP::Get.new(uri.request_uri)
-  request['User-Agent'] = 'Mozilla/5.0 (compatible; AWS-Lambda-Proxy/1.0)'
+  request["User-Agent"] = "Mozilla/5.0 (compatible; AWS-Lambda-Proxy/1.0)"
 
   response = http.request(request)
 
   case response.code.to_i
   when 200..299
     # 成功レスポンス
-    content_type = response['content-type'] || 'application/octet-stream'
+    content_type = response["content-type"] || "application/octet-stream"
 
     # Content-Typeからバイナリかテキストかを判定
     is_binary = is_binary_content?(content_type)
@@ -120,7 +120,7 @@ def fetch_content(url)
       # バイナリデータの場合はBase64エンコードしてisBase64Encodedフラグを設定
       {
         status: 200,
-        headers: { 'Content-Type' => content_type },
+        headers: {"Content-Type" => content_type},
         body: Base64.strict_encode64(response.body),
         isBase64Encoded: true
       }
@@ -128,14 +128,14 @@ def fetch_content(url)
       # テキストデータの場合はそのまま
       {
         status: 200,
-        headers: { 'Content-Type' => content_type },
+        headers: {"Content-Type" => content_type},
         body: response.body.force_encoding("utf-8"),
         isBase64Encoded: false
       }
     end
   when 300..399
     # リダイレクトの場合 - Google Driveでよく発生
-    location = response['location']
+    location = response["location"]
     if location
       # リダイレクト先を再帰的に取得（1回のみ）
       fetch_content(location)
@@ -159,29 +159,29 @@ end
 def is_binary_content?(content_type)
   # バイナリと判定するContent-Type
   binary_types = [
-    'image/',
-    'video/',
-    'audio/',
-    'application/pdf',
-    'application/zip',
-    'application/gzip',
-    'application/x-tar',
-    'application/x-rar-compressed',
-    'application/x-7z-compressed',
-    'application/vnd.ms-excel',
-    'application/vnd.openxmlformats-officedocument',
-    'application/msword',
-    'application/vnd.ms-powerpoint',
-    'application/octet-stream'
+    "image/",
+    "video/",
+    "audio/",
+    "application/pdf",
+    "application/zip",
+    "application/gzip",
+    "application/x-tar",
+    "application/x-rar-compressed",
+    "application/x-7z-compressed",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument",
+    "application/msword",
+    "application/vnd.ms-powerpoint",
+    "application/octet-stream"
   ]
 
   # テキストと判定するContent-Type
   text_types = [
-    'text/',
-    'application/json',
-    'application/xml',
-    'application/javascript',
-    'application/x-javascript'
+    "text/",
+    "application/json",
+    "application/xml",
+    "application/javascript",
+    "application/x-javascript"
   ]
 
   content_type_lower = content_type.downcase

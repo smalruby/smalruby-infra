@@ -1,11 +1,11 @@
 require "uri"
 require "net/http"
 
-ALLOW_ORIGINS = %w(
+ALLOW_ORIGINS = %w[
   https://smalruby.app
   https://smalruby.jp
   http://localhost:8601
-)
+]
 
 API_HOST = "https://api.scratch.mit.edu"
 

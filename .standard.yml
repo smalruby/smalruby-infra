@@ -1,0 +1,15 @@
+# Standard configuration for Smalruby Infrastructure
+# Only lint Lambda function files
+
+# Include only lambda directory Ruby files
+include:
+  - "lambda/**/*.rb"
+
+# Exclude everything else
+exclude:
+  - "scripts/**/*.rb"
+  - "*.rb"
+  - "Rakefile"
+
+# Use Standard Ruby style rules
+ruby_version: 3.4

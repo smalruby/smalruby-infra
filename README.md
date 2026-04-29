@@ -1,4 +1,42 @@
-# Smalruby Infrastructure
+# Smalruby Infrastructure (DEPRECATED — 2026-04-29)
+
+> ⚠️ **このリポジトリは廃止されました。**
+>
+> ここで管理していた SAM スタック (`smalruby-infra-prod`) は AWS から削除済み、
+> すべての Lambda 関数 / API Gateway 設定は
+> [smalruby/smalruby3-editor](https://github.com/smalruby/smalruby3-editor) リポジトリの
+> [`infra/smalruby-api/`](https://github.com/smalruby/smalruby3-editor/tree/develop/infra/smalruby-api)
+> に **AWS CDK プロジェクト** として移行されました。
+>
+> ## 移行マップ
+>
+> | 旧 (このリポジトリの SAM Lambda) | 新 (smalruby3-editor/infra/smalruby-api) |
+> |----------|--------------------------------------------------|
+> | `lambda/smalruby-cors-proxy` | `lambda/cors-proxy.ts` (TypeScript / Node.js 20 ARM64) |
+> | `lambda/smalruby-mesh-zone-get` | `lambda/mesh-zone-get.ts` |
+> | `lambda/smalruby-scratch-api-proxy-get-project-info` | `lambda/scratch-api-projects.ts` |
+> | `lambda/smalruby-scratch-api-proxy-translate` | `lambda/scratch-api-translate.ts` |
+> | `lambda/cors-for-smalruby` | (廃止) HTTP API v2 の built-in CORS で OPTIONS 自動処理 |
+>
+> カスタムドメイン `api.smalruby.app` は CDK スタック `SmalrubyApiStack` が
+> ApiMapping 経由でルーティングしている。
+>
+> ## 移行理由
+>
+> 1. `scratch-api-proxy/projects/{projectId}` のステータスコード透過バグ
+>    (`Net::HTTP.get` がボディだけ取得し常に 200 を返していた) を修正するため
+> 2. 他の infra プロジェクト (mesh-v2, classroom, rubytee-relay) と同じ
+>    CDK + TypeScript のスタックに統一するため
+> 3. stg 環境を新設するため (旧実装は prod のみ)
+>
+> 詳細は smalruby3-editor の
+> [Issue #573](https://github.com/smalruby/smalruby3-editor/issues/573) /
+> [PR #574](https://github.com/smalruby/smalruby3-editor/pull/574) /
+> [PR #575](https://github.com/smalruby/smalruby3-editor/pull/575) を参照。
+>
+> 以下の旧 SAM ドキュメントは履歴的価値のために残してあるが、運用には使われていない。
+
+---
 
 Infrastructure as Code for Smalruby APIs using AWS SAM (Serverless Application Model).
 
